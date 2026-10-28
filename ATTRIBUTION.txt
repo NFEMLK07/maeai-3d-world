@@ -1,0 +1,1 @@
+Map roads/waterways: © OpenStreetMap contributors — https://www.openstreetmap.org/copyright — Open Database License (ODbL). Original DEM and learning-place points provided by user; terrain outside DEM validity mask interpolated for visual presentation only.

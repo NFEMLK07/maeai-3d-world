@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>MAE AI 3D WORLD — V4.1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap');
+:root{color-scheme:dark;--bg:#dbe9e5;--card:#092623ef;--card2:#0e2b28ef;--line:#ffffff24;--accent:#90f0bf;--soft:#d9f0e6;--muted:#9fbeb3;--shadow:0 14px 40px #0004}*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:linear-gradient(180deg,#d6e7e2 0%,#bedbd4 36%,#7ba095 100%);font-family:Kanit,system-ui,sans-serif;color:#fff;overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}#scene{position:fixed;inset:0}#scene canvas{display:block;touch-action:none}
+.top{position:fixed;z-index:10;top:14px;left:16px;right:16px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;gap:12px}.brand,.stats{pointer-events:auto;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:22px;padding:13px 16px;box-shadow:var(--shadow)}.brand b{font-size:20px;color:#f2fff7;display:block}.brand small{display:block;color:#b0d0c4;font-size:11px;letter-spacing:2px}.brand .sub{margin-top:2px;color:#d8eee5;font-size:12px}.stats{display:flex;align-items:center;gap:18px;font-size:13px}.stats strong{color:var(--accent);font-size:22px;display:block;line-height:1}.stats .lab{color:#d6ece2}
+.sidebar{position:fixed;left:16px;top:112px;bottom:18px;width:330px;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:26px;padding:18px;z-index:11;display:flex;flex-direction:column;gap:12px;backdrop-filter:blur(18px);box-shadow:0 15px 55px #0005}.sidebar h2{font-size:22px;margin:0}.sidebar .lead{font-size:12px;color:#bcd6cb;line-height:1.55}.sidebar input,.sidebar select{width:100%;border:1px solid #ffffff1f;color:white;background:#ffffff10;border-radius:14px;padding:12px 13px;outline:0}.sidebar select option{background:#12312f}.count{font-size:12px;color:#b8cfc8}.list{overflow:auto;min-height:0;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;padding-right:4px}.place{background:#ffffff0a;text-align:left;border:1px solid transparent;color:white;padding:11px 12px;border-radius:14px;display:flex;gap:10px;align-items:flex-start}.place:hover,.place.active{border-color:#8df3bf99;background:#8df3bf22}.emoji{font-size:23px;line-height:1}.place .name{font-size:13px;font-weight:600;line-height:1.45}.place small{display:block;color:#c0d4cd;font-size:11px;margin-top:3px}.info{font-size:11px;color:#9cc2b4;line-height:1.45}.warning{font-size:11px;color:#ead89a;line-height:1.5;background:#ffffff08;border-radius:12px;padding:10px}.pillbar,.legend{display:flex;gap:8px;flex-wrap:wrap}.pill{font-size:11px;padding:6px 9px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff14;color:#eafff6}.legend span{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#d9eee6;background:#ffffff0b;border:1px solid #ffffff14;padding:5px 8px;border-radius:999px}.dot{width:10px;height:10px;border-radius:50%}
+.actions{position:fixed;right:18px;top:214px;z-index:9;display:flex;flex-direction:column;gap:9px}.actions button,.floating-btn,.north-btn{background:#0b2928e8;border:1px solid #ffffff30;color:white;border-radius:16px;padding:12px 15px;backdrop-filter:blur(12px);box-shadow:0 8px 25px #0003}.actions button:hover,.floating-btn:hover,.north-btn:hover{background:#236b55}
+.detail{position:fixed;right:18px;bottom:18px;width:min(400px,calc(100vw - 36px));max-height:66vh;overflow:auto;background:linear-gradient(180deg,#0d2827f4,#0c2221f1);border:1px solid #ffffff35;box-shadow:0 16px 60px #0008;border-radius:24px;padding:19px;z-index:12;display:none;backdrop-filter:blur(18px)}.detail.show{display:block}.detail h2{font-size:22px;margin:2px 26px 8px 0;line-height:1.45}.detail .tag{color:#8ff4bf;font-size:12px}.detail p{white-space:pre-wrap;font-size:13px;color:#d8e6e0;line-height:1.72;max-height:230px;overflow:auto}.detail .addr{font-size:12px;color:#adc6bf;line-height:1.5}.detail a{color:#84ddb2;overflow-wrap:anywhere}.detail .x{float:right;border:0;background:#ffffff18;border-radius:11px;color:white;padding:4px 10px}.detail .go{width:100%;border:0;background:#17a976;color:white;padding:12px;border-radius:13px;margin:11px 0;font-weight:600}
+.footer{position:fixed;bottom:22px;left:360px;z-index:8;background:#082422bf;border:1px solid #ffffff25;border-radius:16px;padding:9px 14px;font-size:12px;color:#d9ede5;backdrop-filter:blur(10px)}.loading{position:fixed;inset:0;background:#061c1b;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}.loading b{font-size:28px;color:#92edbf}.loading small{color:#bed6cb;text-align:center;max-width:560px;line-height:1.65}.hide{display:none!important}.mobile-open{display:none}
+.compass-wrap{position:fixed;right:18px;top:82px;z-index:10;display:flex;align-items:center;gap:10px}.compass{width:110px;height:110px;border-radius:50%;background:rgba(9,38,35,.9);border:1px solid #ffffff26;backdrop-filter:blur(16px);box-shadow:var(--shadow);position:relative;display:flex;align-items:center;justify-content:center}.compass .ring{position:absolute;inset:10px;border:1px solid #ffffff20;border-radius:50%}.compass .dir{position:absolute;font-size:12px;color:#dff8ee;font-weight:700;text-shadow:0 1px 2px #0007}.compass .n{top:8px;left:50%;transform:translateX(-50%)}.compass .s{bottom:8px;left:50%;transform:translateX(-50%)}.compass .e{right:8px;top:50%;transform:translateY(-50%)}.compass .w{left:8px;top:50%;transform:translateY(-50%)}.needle-wrap{position:absolute;width:72px;height:72px;transition:transform .15s linear}.needle{position:absolute;left:50%;top:50%;width:6px;height:58px;transform:translate(-50%,-50%)}.needle:before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:26px solid #ff8472}.needle:after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%) rotate(180deg);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:22px solid #7bd4ff}.needle-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:#e8fff4;border:3px solid #0a2522}.north-btn{padding:10px 14px;font-size:12px;font-weight:600}
+@media(max-width:920px){.top{top:8px;left:10px;right:10px}.brand{padding:10px 12px}.brand b{font-size:16px}.brand small{font-size:9px}.brand .sub{font-size:10px}.stats{gap:8px;padding:10px 12px}.stats strong{font-size:16px}.stats .hide-mobile{display:none}.sidebar{left:8px;top:78px;bottom:9px;width:min(308px,calc(100vw - 16px));transform:translateX(calc(-100% - 12px));transition:transform .24s}.sidebar.open{transform:none}.mobile-open{display:block;position:fixed;z-index:13;left:12px;bottom:14px}.actions{top:176px;right:10px}.actions button{padding:10px 12px}.footer{left:12px;bottom:66px;right:12px;text-align:center;font-size:10px}.detail{bottom:12px;right:9px;max-height:46vh}.top .stats{font-size:10px}.compass-wrap{right:10px;top:76px;transform:scale(.72);transform-origin:top right}}
+.osm-status{position:fixed;z-index:9;bottom:70px;right:18px;max-width:340px;border:1px solid #ffffff33;background:#0a2927dc;color:#e3ffef;padding:8px 13px;border-radius:12px;font-size:11px;backdrop-filter:blur(12px)}@media(max-width:920px){.osm-status{bottom:105px;right:10px;max-width:190px;font-size:10px}.actions{top:185px}.actions button{max-width:135px;font-size:11px}} </style></head><body>
+<div id="scene"></div>
+<div id="loading" class="loading"><b>🌄 MAE AI 3D WORLD — V4.1 FIX</b><small>กำลังเปิดภูมิประเทศและแหล่งเรียนรู้…<br>DEM แม่อายจริงของแม่อาย + พิกัดแหล่งเรียนรู้ 75 จุดเดิม + ปรับเป็นโลก Low-poly แบบใช้งานจริง</small></div>
+<header class="top"><div class="brand"><b>🏔️ MAE AI 3D WORLD</b><small>EXPLORE • LEARN • DISCOVER</small><div class="sub">V4.2 — Mae Ai Miniature Diorama</div></div><div class="stats"><div><strong id="allcount">75</strong><span class="lab">แหล่งเรียนรู้</span></div><div><strong>7</strong><span class="lab">ตำบล</span></div><div class="hide-mobile"><strong>V4.2</strong><span class="lab">EXPLORER</span></div></div></header>
+<div class="compass-wrap"><div class="compass" aria-label="เข็มทิศ"><div class="ring"></div><div class="dir n">N</div><div class="dir e">E</div><div class="dir s">S</div><div class="dir w">W</div><div class="needle-wrap" id="needleWrap"><div class="needle"></div><div class="needle-core"></div></div></div><button id="northUp" class="north-btn">↑ หันเหนือ</button></div>
+<button id="mobileBtn" class="floating-btn mobile-open">☰ สำรวจสถานที่</button>
+<aside id="sidebar" class="sidebar"><h2>🧭 สำรวจแหล่งเรียนรู้</h2><div class="lead">เวอร์ชันนี้เริ่มใช้งานต่อจริงได้แล้ว โดยยังอ้างอิงแผนที่เดิมทั้งหมด: DEM เดิมของแม่อาย + พิกัด 75 แห่งเดิม + ทิศเหนือจริง พร้อมปรับหน้าตาให้เป็นโลก 3 มิติแบบอ่านง่ายขึ้น</div><input id="search" placeholder="ค้นหาชื่อ / คำอธิบาย / ตำบล" aria-label="ค้นหาสถานที่"><select id="tambon" aria-label="กรองตำบล"><option value="">ทุกตำบล</option></select><select id="category" aria-label="กรองประเภท"><option value="">ทุกประเภท</option></select><div class="pillbar"><span class="pill">DEM แม่อายจริง</span><span class="pill">75 จุดจริง</span><span class="pill">มีเข็มทิศ</span><span class="pill">ไม่มีเมฆ</span></div><div class="count" id="resultCount"></div><div class="list" id="placeList"></div><div class="legend"><span><i class="dot" style="background:#ffb15c"></i>สถานที่</span><span><i class="dot" style="background:#79e6a8"></i>อาชีพ</span><span><i class="dot" style="background:#ba96fa"></i>บุคคล</span><span><i class="dot" style="background:#6bd7eb"></i>สกร.</span><span><i class="dot" style="background:#f9da81"></i>ห้องสมุด</span></div><div class="warning">ภูมิประเทศด้านในอ้างอิง DEM จริง ส่วนขอบนอกที่เติมปิดช่องว่างเป็นพื้นผิวประมาณการและแสดงโทนสีต่างกัน ถนน/แม่น้ำโหลดจาก OpenStreetMap เมื่อออนไลน์ ไม่ได้สร้างเส้นทางจำลอง</div></aside>
+<div class="actions"><button id="viewMode" title="ซูมเข้าเพื่อสำรวจ">🔎 โหมดสำรวจ</button><button id="labelsToggle" title="แสดงหรือซ่อนหมุด">📍 ซ่อนหมุด</button><button id="loadOsm" title="โหลดใหม่จากไฟล์ OSM ในโฟลเดอร์">🛣️ โหลดถนน/แม่น้ำใหม่</button><button id="toggleDetail" title="สลับถนนรองและลำน้ำย่อย">🛣️ แสดงทางย่อย</button><button id="toggleOsm" title="แสดงหรือซ่อนชั้นข้อมูล">🗺️ ซ่อนเส้นทาง</button><button id="home" title="กลับไปดูทั้งแผนที่">⌂ มุมสูง</button><button id="zin" title="ซูมเข้า">＋</button><button id="zout" title="ซูมออก">－</button><button id="spin" title="หมุนอัตโนมัติ">⟳ หมุน</button></div>
+<section class="detail" id="detail"><button class="x" id="close">✕</button><div class="tag" id="dcat"></div><h2 id="dtitle"></h2><div class="addr" id="dloc"></div><p id="ddesc"></p><div class="addr" id="daddr"></div><div id="dsocial"></div><button class="go" id="flyagain">✈ บินไปยังจุดนี้</button><a id="navigate" target="_blank" rel="noopener noreferrer">📍 เปิดเส้นทาง Google Maps</a></section>
+<div class="osm-status" id="osmStatus">ถนน/แม่น้ำ: กำลังเตรียมข้อมูล...<small style="display:block;color:#afd8c8">ข้อมูลถนนและน้ำ © OpenStreetMap contributors</small></div><div class="footer">🖱️ ลากเพื่อหมุน • ล้อเมาส์เพื่อซูม • แตะหมุดหรือเลือกจากรายการ • เข็มทิศสัมพันธ์กับทิศเหนือจริงของแผนที่</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const $=id=>document.getElementById(id);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#f5f0e6');
+scene.fog=new THREE.FogExp2('#f5f0e6',0.00065);
+const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,0.1,2500);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;$('scene').appendChild(renderer.domElement);
+const ctrl=new OrbitControls(camera,renderer.domElement);ctrl.enableDamping=true;ctrl.dampingFactor=.055;ctrl.minDistance=32;ctrl.maxDistance=320;ctrl.minPolarAngle=0.72;ctrl.maxPolarAngle=1.18;ctrl.target.set(0,10,0);
+scene.add(new THREE.HemisphereLight(0xf6fff7,0x6c8c7b,2.4));
+const sun=new THREE.DirectionalLight(0xfff0d4,2.6);sun.position.set(-90,150,65);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-220;sun.shadow.camera.right=220;sun.shadow.camera.top=220;sun.shadow.camera.bottom=-220;scene.add(sun);
+const fill1=new THREE.DirectionalLight(0xc4e5ff,0.55);fill1.position.set(90,65,-100);scene.add(fill1);
+const fill2=new THREE.DirectionalLight(0xe8ffd9,0.35);fill2.position.set(30,50,120);scene.add(fill2);
+const mat=(c,roughness=1)=>new THREE.MeshStandardMaterial({color:c,roughness,flatShading:true});
+const rnd=(x,z,n=0)=>{let v=Math.sin(x*12.9898+z*78.233+n*37.7)*43758.5453;return v-Math.floor(v)};
+const terrainData=await fetch('./terrain.json').then(r=>r.json());
+const places=await fetch('./places.json').then(r=>r.json());
+const [west,south,east,north]=terrainData.bounds;
+const WORLD_W=234, WORLD_H=232, baseY=-12;
+const ix=x=>Math.max(0,Math.min(terrainData.cols-1,Math.round((x/WORLD_W+.5)*(terrainData.cols-1))));
+const iz=z=>Math.max(0,Math.min(terrainData.rows-1,Math.round((z/WORLD_H+.5)*(terrainData.rows-1))));
+function valid(x,z){return !!terrainData.observed[iz(z)][ix(x)]}
+function heightValue(v){return v===null?0:(v-terrainData.min)*0.025+2.2}
+function height(x,z){return heightValue(terrainData.heights[iz(z)][ix(x)])}
+function colorFor(v){if(v===null) return new THREE.Color('#8cb08a'); const y=(v-terrainData.min); if(y>52) return new THREE.Color('#e6cf98'); if(y>35) return new THREE.Color('#dbc998'); if(y>20) return new THREE.Color('#b5c48b'); if(y>8) return new THREE.Color('#b6cf93'); return new THREE.Color('#cfe3a7');}
+// Terrain top
+const verts=[],colors=[],indices=[];
+for(let r=0;r<terrainData.rows;r++)for(let c=0;c<terrainData.cols;c++){
+  const x=(c/(terrainData.cols-1)-.5)*WORLD_W, z=(r/(terrainData.rows-1)-.5)*WORLD_H, v=terrainData.heights[r][c], y=heightValue(v);
+  verts.push(x,y,z); const col=colorFor(v); if(!terrainData.observed[r][c])col.lerp(new THREE.Color('#a8a596'),.68); colors.push(col.r,col.g,col.b);
+}
+for(let r=0;r<terrainData.rows-1;r++)for(let c=0;c<terrainData.cols-1;c++){
+  const a=r*terrainData.cols+c,b=a+1,d=(r+1)*terrainData.cols+c,e=d+1; const good=i=>terrainData.heights[Math.floor(i/terrainData.cols)][i%terrainData.cols]!==null;
+  if(good(a)&&good(d)&&good(b)) indices.push(a,d,b);
+  if(good(b)&&good(d)&&good(e)) indices.push(b,d,e);
+}
+const terrGeo=new THREE.BufferGeometry();terrGeo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));terrGeo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));terrGeo.setIndex(indices);terrGeo.computeVertexNormals();
+const terrain=new THREE.Mesh(terrGeo,new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.DoubleSide,flatShading:true,roughness:1}));terrain.receiveShadow=true;scene.add(terrain);
+// Diorama side walls and bottom slab
+function buildSkirt(edgeName){ const pos=[]; const pushQuad=(x1,y1,z1,x2,y2,z2)=>{ pos.push(x1,y1,z1, x1,baseY,z1, x2,y2,z2, x1,baseY,z1, x2,baseY,z2, x2,y2,z2); };
+ if(edgeName==='north'){ for(let c=0;c<terrainData.cols-1;c++){ const x1=(c/(terrainData.cols-1)-.5)*WORLD_W, z=-WORLD_H/2, x2=((c+1)/(terrainData.cols-1)-.5)*WORLD_W; const v1=terrainData.heights[0][c], v2=terrainData.heights[0][c+1]; if(v1===null||v2===null) continue; pushQuad(x1,heightValue(v1),z,x2,heightValue(v2),z);} }
+ if(edgeName==='south'){ for(let c=0;c<terrainData.cols-1;c++){ const x1=(c/(terrainData.cols-1)-.5)*WORLD_W, z=WORLD_H/2, x2=((c+1)/(terrainData.cols-1)-.5)*WORLD_W; const v1=terrainData.heights[terrainData.rows-1][c], v2=terrainData.heights[terrainData.rows-1][c+1]; if(v1===null||v2===null) continue; pushQuad(x2,heightValue(v2),z,x1,heightValue(v1),z);} }
+ if(edgeName==='west'){ for(let r=0;r<terrainData.rows-1;r++){ const z1=(r/(terrainData.rows-1)-.5)*WORLD_H, x=-WORLD_W/2, z2=((r+1)/(terrainData.rows-1)-.5)*WORLD_H; const v1=terrainData.heights[r][0], v2=terrainData.heights[r+1][0]; if(v1===null||v2===null) continue; pushQuad(x,heightValue(v1),z1,x,heightValue(v2),z2);} }
+ if(edgeName==='east'){ for(let r=0;r<terrainData.rows-1;r++){ const z1=(r/(terrainData.rows-1)-.5)*WORLD_H, x=WORLD_W/2, z2=((r+1)/(terrainData.rows-1)-.5)*WORLD_H; const v1=terrainData.heights[r][terrainData.cols-1], v2=terrainData.heights[r+1][terrainData.cols-1]; if(v1===null||v2===null) continue; pushQuad(x,heightValue(v2),z2,x,heightValue(v1),z1);} }
+ const g=new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3)); g.computeVertexNormals(); const m=new THREE.Mesh(g, new THREE.MeshStandardMaterial({color:'#9b9b81',roughness:1,flatShading:true})); m.receiveShadow=true; m.castShadow=false; scene.add(m); }
+['north','south','west','east'].forEach(buildSkirt);
+const bottom=new THREE.Mesh(new THREE.BoxGeometry(WORLD_W,2,WORLD_H), new THREE.MeshStandardMaterial({color:'#77775d',roughness:1,flatShading:true})); bottom.position.y=baseY-1; bottom.receiveShadow=true; scene.add(bottom);
+// Decorative rim outline
+const rim=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(WORLD_W,2,WORLD_H)), new THREE.LineBasicMaterial({color:'#66654d'})); rim.position.y=baseY-1; scene.add(rim);
+const underlay=new THREE.Mesh(new THREE.BoxGeometry(WORLD_W+1,2.6,WORLD_H+1),mat('#d3c7a5'));underlay.position.y=baseY-3.1;underlay.receiveShadow=true;scene.add(underlay);
+// Helpers and world data
+const catColors=['#ffb15c','#79e6a8','#ba96fa','#6bd7eb','#f9da81']; const cats=[...new Set(places.map(p=>p.category))];
+const coord=p=>({x:((p.lon-west)/(east-west)-.5)*WORLD_W, z:((north-p.lat)/(north-south)-.5)*WORLD_H});
+places.forEach(p=>p._coord=coord(p));
+const center={x:places.reduce((s,p)=>s+p._coord.x,0)/places.length, z:places.reduce((s,p)=>s+p._coord.z,0)/places.length};
+function setHomeView(){ const d=210, polar=0.77, azimuth=0.66; const y=d*Math.cos(polar), flat=d*Math.sin(polar); camera.position.set(center.x+Math.sin(azimuth)*flat, 26+y, center.z+Math.cos(azimuth)*flat); ctrl.target.set(center.x,8,center.z); ctrl.update(); }
+setHomeView();
+// World decoration
+const treeTrunk=mat('#6b563f'); const treeMat=[mat('#3b865e'),mat('#6c9b55'),mat('#e6b765')];
+function tree(x,z,s){ if(!valid(x,z)) return; let h=height(x,z),trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18*s,.26*s,1.8*s,5),treeTrunk); trunk.position.set(x,h+0.9*s,z); trunk.castShadow=true; let crown=new THREE.Mesh(new THREE.ConeGeometry(1.05*s,3.5*s,6),treeMat[Math.floor(rnd(x,z,2)*treeMat.length)]); crown.position.set(x,h+2.7*s,z); crown.castShadow=true; scene.add(trunk,crown)}
+for(let i=0;i<430;i++){let x=(rnd(i,2)-.5)*215,z=(rnd(i,3)-.5)*210;if(!valid(x,z)||rnd(i,4)<.34)continue;tree(x,z,.34+rnd(i,5)*.9)}
+const roofMats=[mat('#bf7159'),mat('#da9268'),mat('#7087a1'),mat('#9e6254')], wallMats=[mat('#efe4c6'),mat('#e6dfd0'),mat('#dce5cf')];
+function house(x,z,s,rot=0){ if(!valid(x,z)) return; let y=height(x,z),b=new THREE.Mesh(new THREE.BoxGeometry(2.5*s,1.6*s,2.2*s),wallMats[Math.floor(rnd(x,z,9)*wallMats.length)]); b.position.set(x,y+.8*s,z); b.rotation.y=rot; b.castShadow=true; let cap=new THREE.Mesh(new THREE.ConeGeometry(2.0*s,1.6*s,4),roofMats[Math.floor(rnd(x,z,8)*roofMats.length)]); cap.position.set(x,y+2.05*s,z); cap.rotation.y=Math.PI/4+rot; cap.castShadow=true; scene.add(b,cap)}
+function field(x,z,sx,sz,rot,col='#c4cc73'){ if(!valid(x,z)) return; let y=height(x,z)+0.04; const m=new THREE.Mesh(new THREE.BoxGeometry(sx,0.08,sz), mat(col)); m.position.set(x,y,z); m.rotation.y=rot; scene.add(m)}
+function shrine(x,z,s=1){ if(!valid(x,z)) return; const y=height(x,z); const base=new THREE.Mesh(new THREE.CylinderGeometry(1.2*s,1.5*s,1.2*s,8), mat('#efe3ca')); base.position.set(x,y+0.6*s,z); const spire=new THREE.Mesh(new THREE.ConeGeometry(1.05*s,2.5*s,8), mat('#f0c56d')); spire.position.set(x,y+2.0*s,z); base.castShadow=spire.castShadow=true; scene.add(base,spire); }
+function eduBuilding(x,z,s=1){ if(!valid(x,z)) return; const y=height(x,z); const b=new THREE.Mesh(new THREE.BoxGeometry(3.8*s,1.8*s,2.8*s), mat('#dde6ef')); b.position.set(x,y+0.9*s,z); const roof=new THREE.Mesh(new THREE.BoxGeometry(4.2*s,.45*s,3.1*s), mat('#5b87c0')); roof.position.set(x,y+1.95*s,z); const door=new THREE.Mesh(new THREE.BoxGeometry(.5*s,.9*s,.15*s), mat('#8f6b4b')); door.position.set(x,y+0.45*s,z+1.42*s); b.castShadow=roof.castShadow=door.castShadow=true; scene.add(b,roof,door); }
+// Communities and landmark stylization anchored to real points
+for(const p of places){ const {x,z}=p._coord; const baseCount=p.category.includes('สถานที่')?3:p.category.includes('อาชีพ')?4:p.category.includes('บุคคล')?2:2; for(let i=0;i<baseCount;i++){ const a=(i/baseCount)*Math.PI*2+rnd(x,z,i)*0.8; const d=3.2+rnd(i,x,z)*6.8; const hx=x+Math.cos(a)*d, hz=z+Math.sin(a)*d; if(!valid(hx,hz)) continue; house(hx,hz,0.45+rnd(hx,hz,3)*0.45,a); if(p.category.includes('อาชีพ') && rnd(i,7)>.42) field(hx+Math.cos(a)*2.1,hz+Math.sin(a)*2.1,1.8+rnd(i,5)*2.4,1.4+rnd(i,6)*2.1,a,'#c4cc73'); }
+ if(/วัด/.test(p.title)) shrine(x,z,1.2); if(/ห้องสมุด/.test(p.title)) eduBuilding(x,z,1.0); if(/สกร/.test(p.category)||/สำนักงานส่งเสริม/.test(p.title)) eduBuilding(x,z,1.15); }
+// Geographic road and river layer: EPSG:4326 OSM coordinates, rendered over DEM.
+const osmGroup = new THREE.Group(); scene.add(osmGroup); let osmLoaded=false;
+let showMinorOSM=false, cachedOSM=null;
+const majorRoadTypes=new Set(['motorway','trunk','primary','secondary']);
+const majorWaterTypes=new Set(['river']);
+function keepFeature(f){const kind=f.properties?.kind||f.properties?.type, sub=String(f.properties?.subtype||'').toLowerCase();return showMinorOSM||(kind==='road'&&majorRoadTypes.has(sub))||(kind==='river'&&majorWaterTypes.has(sub));}
+
+const roadColor=new THREE.MeshBasicMaterial({color:'#fff5db',side:THREE.DoubleSide,depthWrite:false});
+const riverColor=new THREE.MeshBasicMaterial({color:'#24b7c4',side:THREE.DoubleSide,depthWrite:false});
+const statusEl=$('osmStatus');
+function drawPath(coords,kind,subtype,acc){
+ if(!Array.isArray(coords) || coords.length<2)return;
+ const width=kind==='river'?(subtype==='river'?2.55:1.05):(subtype==='primary'||subtype==='trunk'?1.12:subtype==='secondary'?0.74:0.43);
+ const material=kind==='river'?riverColor:roadColor;
+ const points=[];
+ for(const v of coords){const lon=Number(v[0]),lat=Number(v[1]);if(!Number.isFinite(lon)||!Number.isFinite(lat))continue;
+  const x=((lon-west)/(east-west)-.5)*WORLD_W,z=((north-lat)/(north-south)-.5)*WORLD_H;
+  if(Math.abs(x)>WORLD_W/2||Math.abs(z)>WORLD_H/2) continue;
+  points.push(new THREE.Vector3(x,height(x,z)+(kind==='river'?.9:1.0),z));}
+ if(points.length<2)return;
+ const vv=[];for(let i=0;i<points.length-1;i++){
+  const p=points[i],q=points[i+1],d=new THREE.Vector3().subVectors(q,p),dist=Math.hypot(d.x,d.z);if(dist<0.01||dist>25)continue;
+  const nx=-d.z/dist*width/2,nz=d.x/dist*width/2;
+  const subdivisions=Math.max(1,Math.ceil(dist/1.8));
+  for(let j=0;j<subdivisions;j++){
+   const t=j/subdivisions,u=(j+1)/subdivisions;
+   const ax=p.x+(q.x-p.x)*t,az=p.z+(q.z-p.z)*t,bx=p.x+(q.x-p.x)*u,bz=p.z+(q.z-p.z)*u;
+   const ay=height(ax,az)+(kind==='river'?.9:1.0),by=height(bx,bz)+(kind==='river'?.9:1.0);
+   vv.push(ax+nx,ay,az+nz,ax-nx,ay,az-nz,bx+nx,by,bz+nz,ax-nx,ay,az-nz,bx-nx,by,bz-nz,bx+nx,by,bz+nz);
+  }
+ }
+ if(vv.length)acc.push(...vv);
+}
+async function applyOsm(data){
+ if(!data || !Array.isArray(data.features))throw new Error('ข้อมูลเส้นทางไม่ถูกต้อง');
+ osmGroup.clear();let roads=0,rivers=0;
+ const roadsVertices=[], riversVertices=[];
+ const features=data.features; const batchSize=220;
+ for(let i=0;i<features.length;i+=batchSize){
+  for(const f of features.slice(i,i+batchSize)){
+   if(f.geometry?.type!=='LineString')continue;
+   const type=f.properties?.kind||f.properties?.type;
+   if((type!=='road'&&type!=='river')||!keepFeature(f))continue;
+   drawPath(f.geometry.coordinates,type,f.properties?.subtype||'',type==='river'?riversVertices:roadsVertices);
+   if(type==='road')roads++;else rivers++;
+  }
+  setOsmStatus(`กำลังวาดถนน/แม่น้ำ ${Math.min(i+batchSize,features.length).toLocaleString()} / ${features.length.toLocaleString()} เส้น`);
+  await new Promise(resolve=>setTimeout(resolve,0));
+ }
+ for(const [vertices,material] of [[roadsVertices,roadColor],[riversVertices,riverColor]]){
+  if(!vertices.length)continue;
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
+  geo.computeVertexNormals();
+  const mesh=new THREE.Mesh(geo,material);mesh.receiveShadow=false;mesh.renderOrder=5;osmGroup.add(mesh);
+ }
+ osmLoaded=true;osmGroup.visible=true;$('toggleOsm').textContent='🗺️ ซ่อนเส้นทาง';setOsmStatus(`✅ ${showMinorOSM?'ทั้งหมด':'เฉพาะสายหลัก'}: ถนน ${roads.toLocaleString()} เส้น • ลำน้ำ ${rivers.toLocaleString()} เส้น`);
+}
+function setOsmStatus(s){statusEl.textContent=s}
+async function queryOsm(){
+ const bbox=`${south},${west},${north},${east}`;
+ const query=`[out:json][timeout:100];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|service|track|living_street)$"](${bbox});way["waterway"~"^(river|stream|canal|ditch)$"](${bbox}););out geom;`;
+ const endpoints=['https://overpass.kumi.systems/api/interpreter','https://overpass-api.de/api/interpreter'];
+ let lastError;
+ for(const url of endpoints){try{
+   const resp=await fetch(url,{method:'POST',body:new URLSearchParams({data:query}),signal:AbortSignal.timeout(115000)});
+   if(!resp.ok)throw new Error('HTTP '+resp.status);const raw=await resp.json();
+   const features=(raw.elements||[]).filter(e=>e.type==='way'&&e.geometry?.length>1).map(e=>({type:'Feature',geometry:{type:'LineString',coordinates:e.geometry.map(p=>[p.lon,p.lat])},properties:{kind:e.tags?.waterway?'river':'road',subtype:e.tags?.waterway||e.tags?.highway}}));
+   return {type:'FeatureCollection',features};
+ }catch(err){lastError=err;}}
+ throw lastError||new Error('ติดต่อ OSM ไม่ได้');
+}
+async function loadOSM(){
+ if (loadOSM.busy) return;
+ loadOSM.busy=true; $('loadOsm').disabled=true;
+ setOsmStatus('⏳ กำลังอ่านไฟล์ osm-roads-rivers.geojson ...');
+ try {
+   const local=await fetch('./osm-roads-rivers.geojson',{cache:'no-store'});
+   if(!local.ok) throw new Error('HTTP '+local.status+' — ไม่พบไฟล์ OSM ในโฟลเดอร์ V4.1.2');
+   const data=await local.json();
+   if(!data.features?.length) throw new Error('GeoJSON ไม่มีรายการเส้นทาง');
+   cachedOSM=data; await applyOsm(data);
+ }catch(err){
+   console.error('OSM loading error:',err);
+   setOsmStatus('⚠️ ยังไม่แสดงถนน/แม่น้ำ: '+err.message+' • ให้วางไฟล์ OSM แล้วกดโหลดอีกครั้ง');
+ }finally{loadOSM.busy=false;$('loadOsm').disabled=false;}
+}
+$('loadOsm').onclick=loadOSM;
+$('labelsToggle').onclick=()=>{markersVisible=!markersVisible;$('labelsToggle').textContent=markersVisible?'📍 ซ่อนหมุด':'📍 แสดงหมุด';filter();};
+$('viewMode').onclick=()=>{const close=$('viewMode').dataset.close==='1';$('viewMode').dataset.close=close?'0':'1';$('viewMode').textContent=close?'🔎 โหมดสำรวจ':'🏞️ ดูทั้งอำเภอ';$('home').click();if(!close){const target=places.find(p=>p.tambon==='แม่อาย')||places[0];flyTo(target);}};
+$('toggleDetail').onclick=async()=>{showMinorOSM=!showMinorOSM;$('toggleDetail').textContent=showMinorOSM?'🛣️ ซ่อนทางย่อย':'🛣️ แสดงทางย่อย';if(cachedOSM){$('toggleDetail').disabled=true;try{await applyOsm(cachedOSM)}finally{$('toggleDetail').disabled=false}}};
+$('toggleOsm').onclick=()=>{osmGroup.visible=!osmGroup.visible;$('toggleOsm').textContent=osmGroup.visible?'🗺️ ซ่อนเส้นทาง':'🗺️ แสดงเส้นทาง'};
+setOsmStatus('แผนที่พร้อม — จะโหลดไฟล์ถนนและแม่น้ำอัตโนมัติ');
+const byTambon={};places.forEach(p=>((byTambon[p.tambon]??=[]).push(p)));
+const centroids=Object.entries(byTambon).map(([name,arr])=>({name,x:arr.reduce((s,p)=>s+p._coord.x,0)/arr.length,z:arr.reduce((s,p)=>s+p._coord.z,0)/arr.length}));
+// Labels
+function makeLabel(text,x,z){ const canvas=document.createElement('canvas'); canvas.width=512; canvas.height=128; const ctx=canvas.getContext('2d'); ctx.fillStyle='rgba(10,35,33,.84)'; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(10,18,492,84,26); else {ctx.rect(10,18,492,84);} ctx.fill(); ctx.fillStyle='#f6fff9'; ctx.font='700 40px Kanit'; ctx.textAlign='center'; ctx.fillText(text,256,72); const tex=new THREE.CanvasTexture(canvas); tex.needsUpdate=true; const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true})); sprite.scale.set(28,7,1); sprite.position.set(x,height(x,z)+11,z); scene.add(sprite); return sprite; }
+// District names available in the filter; labels kept off overview to reduce clutter.
+// Markers
+const markers=[]; let filtered=places.slice(),selected=null; let markersVisible=true; const pinGeo=new THREE.ConeGeometry(1.18,2.6,10); pinGeo.rotateX(Math.PI); const orbGeo=new THREE.SphereGeometry(1.1,14,10);
+function addMarker(p){ let {x,z}=p._coord,y=height(x,z)+4.3; let group=new THREE.Group(); group.position.set(x,y,z); let color=catColors[cats.indexOf(p.category)%catColors.length]; let orb=new THREE.Mesh(orbGeo,mat(color,0.95)); orb.position.y=1.55; orb.castShadow=true; let pt=new THREE.Mesh(pinGeo,mat(color,0.95)); pt.castShadow=true; group.add(orb,pt); group.userData.place=p; scene.add(group); markers.push(group); p._position={x,y,z}; }
+places.forEach(addMarker);
+function optionValues(id,key){[...new Set(places.map(p=>p[key]))].sort((a,b)=>a.localeCompare(b,'th')).forEach(s=>{let o=document.createElement('option');o.value=s;o.textContent=s;$(id).appendChild(o)})}
+optionValues('tambon','tambon'); optionValues('category','category');
+function escapeHTML(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function filter(){ let q=$('search').value.trim().toLocaleLowerCase('th'),t=$('tambon').value,c=$('category').value; filtered=places.filter(p=>(!t||p.tambon===t)&&(!c||p.category===c)&&(!q||[p.title,p.description,p.tambon,p.category].some(s=>s.toLocaleLowerCase('th').includes(q)))); $('resultCount').textContent=`พบ ${filtered.length} จาก ${places.length} แห่ง`; $('placeList').replaceChildren(); for(const p of filtered){ const el=document.createElement('button'); el.className='place'+(selected?.id===p.id?' active':''); el.innerHTML=`<span class="emoji">${p.category.includes('บุคคล')?'🧑':p.category.includes('อาชีพ')?'🌱':p.category.includes('ห้องสมุด')?'📚':p.category.includes('สกร')?'🎓':'📍'}</span><span><span class="name">${escapeHTML(p.title)}</span><small>ต.${escapeHTML(p.tambon)} · ${escapeHTML(p.category)}</small></span>`; el.onclick=()=>choose(p); $('placeList').appendChild(el);} for(const g of markers)g.visible=markersVisible&&filtered.some(p=>p.id===g.userData.place.id); }
+$('search').oninput=filter; $('tambon').onchange=filter; $('category').onchange=filter; filter(); $('allcount').textContent=places.length;
+let flight=null;
+function flyTo(p){ const v=new THREE.Vector3(p._position.x,p._position.y,p._position.z), end=v.clone().add(new THREE.Vector3(18,18,22)); flight={fromCam:camera.position.clone(),fromTar:ctrl.target.clone(),toCam:end,toTar:v,start:performance.now(),duration:1150}; ctrl.autoRotate=false; $('spin').textContent='⟳ หมุน'; }
+function choose(p){ selected=p; flyTo(p); $('detail').classList.add('show'); $('dcat').textContent=p.category+' · ตำบล'+p.tambon; $('dtitle').textContent=p.title; $('dloc').textContent=`📍 ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}`; $('ddesc').textContent=p.description; $('daddr').textContent=p.address; $('dsocial').replaceChildren(); if(/^https?:\/\//i.test(p.link)){ let a=document.createElement('a'); a.href=p.link; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent='🔗 ข้อมูลเพิ่มเติม'; $('dsocial').appendChild(a);} $('navigate').href=`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`; $('sidebar').classList.remove('open'); filter(); }
+$('flyagain').onclick=()=>selected&&flyTo(selected); $('close').onclick=()=>$('detail').classList.remove('show'); $('mobileBtn').onclick=()=>$('sidebar').classList.toggle('open');
+$('home').onclick=()=>{ const dist=camera.position.distanceTo(ctrl.target); const az=0.66, polar=0.77; const y=dist*Math.cos(polar), flat=dist*Math.sin(polar); flight={fromCam:camera.position.clone(),fromTar:ctrl.target.clone(),toCam:new THREE.Vector3(center.x+Math.sin(az)*flat,26+y,center.z+Math.cos(az)*flat),toTar:new THREE.Vector3(center.x,8,center.z),start:performance.now(),duration:1200}; ctrl.autoRotate=false; $('spin').textContent='⟳ หมุน'; };
+$('northUp').onclick=()=>{ const dist=camera.position.distanceTo(ctrl.target); const polar=ctrl.getPolarAngle(); const y=dist*Math.cos(polar), flat=dist*Math.sin(polar); flight={fromCam:camera.position.clone(),fromTar:ctrl.target.clone(),toCam:new THREE.Vector3(ctrl.target.x,ctrl.target.y+y,ctrl.target.z+flat),toTar:ctrl.target.clone(),start:performance.now(),duration:900}; ctrl.autoRotate=false; $('spin').textContent='⟳ หมุน'; };
+$('zin').onclick=()=>{camera.position.lerp(ctrl.target,.18);ctrl.update()}; $('zout').onclick=()=>{camera.position.sub(ctrl.target).multiplyScalar(1.18).add(ctrl.target);ctrl.update()}; $('spin').onclick=()=>{ctrl.autoRotate=!ctrl.autoRotate; ctrl.autoRotateSpeed=.45; $('spin').textContent=ctrl.autoRotate?'⏸ หยุดหมุน':'⟳ หมุน'};
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(); let pointerDown=null; renderer.domElement.addEventListener('pointerdown',e=>pointerDown={x:e.clientX,y:e.clientY}); renderer.domElement.addEventListener('pointerup',e=>{ if(!pointerDown||Math.hypot(e.clientX-pointerDown.x,e.clientY-pointerDown.y)>6)return; mouse.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1); ray.setFromCamera(mouse,camera); const hit=ray.intersectObjects(markers.filter(g=>g.visible),true); if(hit.length){ let o=hit[0].object; while(o&&!o.userData.place)o=o.parent; if(o?.userData.place) choose(o.userData.place); }});
+function updateCompass(){ const ang=ctrl.getAzimuthalAngle(); $('needleWrap').style.transform=`rotate(${(-ang)*180/Math.PI}deg)`; }
+function loop(t){ requestAnimationFrame(loop); if(flight){ let u=Math.min(1,(t-flight.start)/flight.duration),v=u*u*(3-2*u); camera.position.lerpVectors(flight.fromCam,flight.toCam,v); ctrl.target.lerpVectors(flight.fromTar,flight.toTar,v); if(u>=1) flight=null; } ctrl.update(); updateCompass(); for(const g of markers)g.children[0].position.y=1.55+Math.sin(t*.002+g.userData.place.id)*.16; renderer.render(scene,camera);} requestAnimationFrame(loop);
+$('loading').classList.add('hide');
+setTimeout(()=>loadOSM(),250);
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+</script></body></html>
